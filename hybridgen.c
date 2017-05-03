@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "charstructures.h"
 
 int append(int argc, char **argv);
 int permutate(void);
@@ -14,6 +15,7 @@ FILE * inpFile;
 
 
 int main(int argc, char **argv){
+	init();
 	if(argc == 2){
 			flush(argv);
 	}
