@@ -1,13 +1,13 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "charstructures.h"
 
 int append(int argc, char **argv);
-int permutate(void);
-int allcombos(void);
 int flush(char **argv);
 int search(void);
+int rmv(void);
 
 
 char singleline[150];
@@ -18,12 +18,11 @@ FILE * inpFile;
 int main(int argc, char **argv){
 	init();
 	if(argc == 2){
-			flush(argv);
+		flush(argv);
 	}
-	//append(argc,argv);
 	else{
 		search();
-		//permutate();
+		rmv();
 	}
 }
 
@@ -46,59 +45,6 @@ int append(int argc, char **argv){
 		return 0;
 	}
 
-//copies words from one dictionary and pastes them into another.
-int permutate(void){
-
-	inpFile = fopen("input.txt","r");
-
-	while (fgets(singleline, sizeof(singleline), inpFile)){
-		fgets(singleline,150,inpFile);
-
-		outpFile = fopen("passwordlist.txt", "a");
-		fprintf(outpFile,"%s",singleline);
-		allcombos();
-	}
-	fclose(inpFile);
-
-
-
-return 0;
-}
-//finds all possible combinations of a word and adds then to passwordlist.txt dictionary
-int allcombos(void){
-
-	for(int i = 0; i  < sizeof(singleline); i++){
-
-		if(singleline[i] >= 97 && singleline[i] < 123){
-			singleline[i] = singleline[i]-32;
-			fprintf(outpFile, "%s",singleline);
-		}
-		//switch statement that will replace current letter with a number
-		switch(singleline[i]){
-			case 'e':
-			case 'E':
-				singleline[i] = '3';
-				fprintf(outpFile,"%s",singleline);
-				break;
-			case 'o':
-			case 'O':
-				singleline[i] = '0';
-				fprintf(outpFile,"%s",singleline);
-				break;
-			case 'l':
-			case 'L':
-				singleline[i] = '1';
-				fprintf(outpFile,"%s",singleline);
-			case 's':
-			case 'S':
-				singleline[i] = '5';
-				break;
-		}
-
-	}
-
-	return 0;
-}
 //flushes out generated passwordlist.txt
 int flush(char **argv){
 		char dest[26];
@@ -110,18 +56,27 @@ int flush(char **argv){
 		return 0;
 }
 
+int rmv(void){
+	printf("%s\n", "Cleaning up duplicates...");
+	system("./rmdupe.sh");
+	return 0;
+}
+
 int search(void){
-
-		inpFile = fopen("input.txt","r");
-
-		while (fgets(singleline, sizeof(singleline), inpFile)){
-			fgets(singleline,150,inpFile);
-			outpFile = fopen("passwordlist.txt", "a");
-			int ce = 0;
-			while(singleline[ce] != '\0'){
-				int cd = 0;
-				switch (singleline[ce]) {
+	//Get input words from here
+	inpFile = fopen("input.txt","r");
+	while (fgets(singleline, sizeof(singleline), inpFile)){
+		fgets(singleline,150,inpFile);
+		//Output words are put in this file
+		outpFile = fopen("passwordlist.txt", "a");
+		int ce = 0;
+		//While there are still letters in the word
+		while(singleline[ce] != '\0'){
+			int cd = 0;
+			//Switch statement that links to structure for each char
+			switch (singleline[ce]) {
 					case 'a':
+					//Charcmb is a string that contains word alternatives to a, "A" or "@"
 					while(a.charcmb[cd] != '\0'){
 						singleline[ce] = a.charcmb[cd];
 						fprintf(outpFile,"%s",singleline);
@@ -360,5 +315,10 @@ int search(void){
 			}
 		}
 	fclose(inpFile);
+	fclose(outpFile);
+
+	printf("%s\n","Done!" );
 	return 0;
+
+
 	}
